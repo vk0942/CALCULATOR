@@ -2,6 +2,8 @@ body{
     background-image: url("./calci.jpg");
     background-size:cover;
     background-repeat:no-repeat;
+    background-attachment:fixed;
+    height:100vh;
 }
 @font-face{
     font-family:'digital-clock-font';
