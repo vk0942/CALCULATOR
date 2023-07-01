@@ -1,12 +1,28 @@
-let num1;
-let num2;
-let op; // + - * /
+let num1 = NaN;
+let num2 = NaN;
+let op=''; // + - * /
+let prev_op='';
+let Display = "";
+let firstminus=false;
+
 const Mold = document.querySelector('#main_body');
 const screen = document.createElement('div');
 const all_buttons = document.createElement('div');
+const curr_display = document.createElement('div');
+const prev_display = document.createElement('div');
+const flah = document.createElement('div');
+flah.textContent="Vk";
 all_buttons.classList.add('button_panel');
 screen.classList.add("screen");
+flah.classList.add('flah');
+curr_display.classList.add('curr');
+prev_display.classList.add('prev');
+screen.appendChild(flah);
+screen.appendChild(prev_display);
+screen.appendChild(curr_display);
+
 Mold.appendChild(screen);
+
 
 //row0
 const row0 = document.createElement('div');
@@ -115,14 +131,107 @@ function multiply(num1,num2)
 }
 function divide(num1,num2)
 {
-    //if(num2===0) return undefined;
+    if(num2===0) return undefined;
     return num1/num2;
 }
 function operate(num1,num2,op)
 {
+   if(isNaN(num1)||(isNaN(num2))) return undefined;
     if(op==='+') return add(num1,num2);
     if(op==='-') return subtract(num1,num2);
     if(op==='x') return multiply(num1,num2);
     if(op==='/') return divide(num1,num2);
-    return null;
+    return undefined;
 }
+function filldisplay(s='')
+{
+    if(s==='~')
+    {
+        Display = "";
+        num1 = NaN;
+        num2 = NaN;
+        op = "";
+        firstminus=false;
+    }else if(s==='$')
+    {
+         Display = Display.slice(0,-1);
+         
+    }else if(s==='.')
+    {
+        if(Display.indexOf(s)==-1)
+        {
+            Display+=s;
+        }
+    }else{
+        if(Display.length<10)  Display = Display + s;
+    }
+    curr_display.textContent=Display;
+    prev_display.textContent=op;
+}
+
+function signs(si)
+{
+    op = si;
+    if(isNaN(num1)) 
+    {
+        if(Display!="")
+        {
+            num1 = parseFloat(Display);
+            prev_op = op;
+        }else if(si==='-'){
+           filldisplay('-');
+           firstminus=true;
+        }
+     
+    }else{
+        num2 = parseFloat(Display);
+        const re = operate(num1,num2,prev_op);
+        prev_op = op;
+        num1=re;
+        num2=NaN;
+    }
+    if(!firstminus) Display="";
+    else firstminus=false;
+    prev_display.textContent = op;
+    
+}
+function output(op)
+{
+    num2 = parseFloat(Display);
+    Display = ""
+    let res = operate(num1,num2,op);
+    num1 = NaN;
+    num2 = NaN;
+    if(!isNaN(res))
+    {
+      Display = String(res);console.log(Display);
+      if(Display.length>9)
+      {
+        const roundExp = Number(res.toPrecision(5)).toExponential();
+        Display = String(roundExp);
+      }
+      curr_display.textContent=Display;
+    }else{
+      curr_display.textContent="INVALID INPUTS"
+    }
+  
+   
+}
+one.addEventListener('click',()=>{filldisplay('1')});
+two.addEventListener('click',()=>{filldisplay('2')});
+three.addEventListener('click',()=>{filldisplay('3')});
+four.addEventListener('click',()=>{filldisplay('4')});
+five.addEventListener('click',()=>{filldisplay('5')});
+six.addEventListener('click',()=>{filldisplay('6')});
+seven.addEventListener('click',()=>{filldisplay('7')});
+eight.addEventListener('click',()=>{filldisplay('8')});
+nine.addEventListener('click',()=>{filldisplay('9')});
+zero.addEventListener('click',()=>{filldisplay('0')});
+dot.addEventListener('click',()=>{filldisplay('.')});
+plus.addEventListener('click',()=>{signs('+')});
+minus.addEventListener('click',()=>{signs('-')});
+mult.addEventListener('click',()=>{signs('x')});
+dvd.addEventListener('click',()=>{signs('/')});
+equal.addEventListener('click',()=>{output(op)});
+AC.addEventListener('click',()=>{filldisplay('~')});
+DEL.addEventListener('click',()=>{filldisplay('$')});
