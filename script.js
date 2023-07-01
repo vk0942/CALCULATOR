@@ -204,7 +204,7 @@ function output(op)
     num2 = NaN;
     if(!isNaN(res))
     {
-      Display = String(res);console.log(Display);
+      Display = String(res);
       if(Display.length>9)
       {
         const roundExp = Number(res.toPrecision(5)).toExponential();
