@@ -143,6 +143,20 @@ function operate(num1,num2,op)
     if(op==='/') return divide(num1,num2);
     return undefined;
 }
+function Del()
+{
+    if(Display==="")
+    {
+        op="";
+        Display = String(num1);
+        num1=NaN;
+    }else{
+        Display = Display.slice(0,-1);
+    }
+    
+    curr_display.textContent=Display;
+    prev_display.textContent=op;
+}
 function filldisplay(s='')
 {
     if(s==='~')
@@ -152,10 +166,6 @@ function filldisplay(s='')
         num2 = NaN;
         op = "";
         firstminus=false;
-    }else if(s==='$')
-    {
-         Display = Display.slice(0,-1);
-         
     }else if(s==='.')
     {
         if(Display.indexOf(s)==-1)
@@ -197,7 +207,9 @@ function signs(si)
 }
 function output(op)
 {
-    num2 = parseFloat(Display);
+    if(Display!="") 
+    {
+        num2 = parseFloat(Display);
     Display = ""
     let res = operate(num1,num2,op);
     num1 = NaN;
@@ -214,7 +226,9 @@ function output(op)
     }else{
       curr_display.textContent="INVALID INPUTS"
     }
-  
+   }else{
+      curr_display.textContent=String(num1);
+   }
    
 }
 one.addEventListener('click',()=>{filldisplay('1')});
@@ -234,4 +248,4 @@ mult.addEventListener('click',()=>{signs('x')});
 dvd.addEventListener('click',()=>{signs('/')});
 equal.addEventListener('click',()=>{output(op)});
 AC.addEventListener('click',()=>{filldisplay('~')});
-DEL.addEventListener('click',()=>{filldisplay('$')});
+DEL.addEventListener('click',()=>{Del()});
